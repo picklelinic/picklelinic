@@ -58,6 +58,30 @@ pnpm dev               # http://localhost:3000
 
 각 모듈은 `docs/ERP_기능_체크리스트.json`의 항목 순서대로 개발한다.
 
+### 체크리스트 상태 자동 관리
+
+기능 구현이 완료되면 해당 작업의 status 를 `done` 으로 표시한다. 요약 수치
+(`meta.summary.done` / `total_tasks`)는 **훅이 자동으로 재계산**하므로 손으로 맞출
+필요가 없다.
+
+```bash
+# 기능 완료 표시 (구현 완료 후 호출)
+node scripts/checklist.mjs set done F2-01 F2-02
+# 진행중/보류 표시
+node scripts/checklist.mjs set in_progress F1-02
+# 현황 보기 (선택: 특정 phase)
+node scripts/checklist.mjs list 1
+# 요약 재계산 (훅이 자동 호출 — 수동 실행도 가능)
+node scripts/checklist.mjs sync
+```
+
+훅 설정(`.claude/settings.json`):
+- **Stop 훅** — 매 작업 턴 종료 시 `checklist.mjs sync` 를 실행해 요약 수치를 항상
+  per-task status 와 일치시킨다.
+- **PostToolUse(Edit|Write) 훅** — 체크리스트 JSON 이 직접 수정되면 즉시 sync.
+
+status 값: `todo` · `in_progress` · `done` · `hold`.
+
 ## 구조
 
 ```
