@@ -18,3 +18,5 @@ next-env.d.ts
 .DS_Store
 *.pem
 /pgdata
+public/uploads/
+!public/uploads/.gitkeep

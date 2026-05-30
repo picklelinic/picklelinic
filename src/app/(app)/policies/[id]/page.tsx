@@ -20,6 +20,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CommentSection } from "./comment-section";
 import { DeletePolicyButton } from "./delete-button";
+import { Attachments } from "@/components/attachments";
+import { PrintButton } from "@/components/print-button";
 
 export const dynamic = "force-dynamic";
 
@@ -88,10 +90,11 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
     <div className="max-w-4xl">
       <div className="mb-4 flex items-start justify-between gap-4">
         <PageHeader title={p.title} description={p.summary ?? undefined} />
-        <div className="flex shrink-0 gap-2">
+        <div className="no-print flex shrink-0 gap-2">
           <Button asChild variant="outline" size="sm">
             <Link href="/policies">목록</Link>
           </Button>
+          <PrintButton />
           {canEdit && (
             <>
               <Button asChild size="sm">
@@ -116,6 +119,8 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
               {p.content || "상세 내용이 없습니다."}
             </CardContent>
           </Card>
+
+          <Attachments entity="policy" entityId={p.id} canEdit={canEdit} />
 
           <CommentSection
             policyId={p.id}

@@ -12,6 +12,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { KeyPolicyToggle } from "./key-toggle";
 import { DeleteCycleButton } from "./delete-button";
+import { Attachments } from "@/components/attachments";
+import { PrintButton } from "@/components/print-button";
 
 export const dynamic = "force-dynamic";
 
@@ -69,8 +71,9 @@ export default async function CycleDetail({
     <div className="max-w-5xl">
       <div className="mb-4 flex items-start justify-between gap-4">
         <PageHeader title={item.it.name} description={`${item.dept ?? ""} ${item.team ?? ""}`.trim()} />
-        <div className="flex shrink-0 gap-2">
+        <div className="no-print flex shrink-0 gap-2">
           <Button asChild variant="outline" size="sm"><Link href="/cycle">목록</Link></Button>
+          <PrintButton />
           <Button asChild size="sm"><Link href={`/cycle/${itemId}/report`}>+ 분기 보고</Link></Button>
           {canEdit && <DeleteCycleButton id={itemId} />}
         </div>
@@ -133,6 +136,10 @@ export default async function CycleDetail({
           <Field label="비고" value={current.note} wide />
         </CardContent>
       </Card>
+
+      <div className="mt-3">
+        <Attachments entity="cycle_item" entityId={itemId} canEdit={canEdit} />
+      </div>
     </div>
   );
 }

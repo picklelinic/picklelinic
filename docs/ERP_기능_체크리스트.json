@@ -29,8 +29,8 @@
     },
     "summary": {
       "total_tasks": 75,
-      "done": 13,
-      "in_progress": 10
+      "done": 64,
+      "in_progress": 0
     }
   },
   "categories": [
@@ -53,7 +53,7 @@
           "description": "관리자가 사용자 등록·수정·비활성화, 부서/팀/역할 지정",
           "phase": 1,
           "priority": "high",
-          "status": "in_progress",
+          "status": "done",
           "depends_on": [
             "F1-01"
           ]
@@ -75,7 +75,7 @@
           "description": "부서 서무 지정, 본인/소속 부서 범위 데이터 접근 제어",
           "phase": 1,
           "priority": "high",
-          "status": "in_progress",
+          "status": "done",
           "depends_on": [
             "F1-03"
           ]
@@ -86,7 +86,7 @@
           "description": "본인 정보 조회·수정, 비밀번호 변경",
           "phase": 1,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F1-01"
           ]
@@ -103,7 +103,7 @@
           "description": "서천군 2읍 11면 + 군 전체/광역 항목, 정렬순서 관리",
           "phase": 1,
           "priority": "high",
-          "status": "in_progress",
+          "status": "done",
           "depends_on": [
             "F1-03"
           ]
@@ -114,7 +114,7 @@
           "description": "복지·농업·수산·관광·인구 등 분야 코드 CRUD",
           "phase": 1,
           "priority": "high",
-          "status": "in_progress",
+          "status": "done",
           "depends_on": [
             "F1-03"
           ]
@@ -125,7 +125,7 @@
           "description": "투자사업/행사·축제/제도·시책/보조사업/경상사업/연구·용역",
           "phase": 1,
           "priority": "high",
-          "status": "in_progress",
+          "status": "done",
           "depends_on": [
             "F1-03"
           ]
@@ -136,7 +136,7 @@
           "description": "국비/도비/군비/기타 코드 및 매칭 관리",
           "phase": 1,
           "priority": "high",
-          "status": "in_progress",
+          "status": "done",
           "depends_on": [
             "F1-03"
           ]
@@ -147,7 +147,7 @@
           "description": "구상→계획→추진중→완료/보류·중단, 지연 플래그",
           "phase": 1,
           "priority": "medium",
-          "status": "in_progress",
+          "status": "done",
           "depends_on": [
             "F1-03"
           ]
@@ -158,7 +158,7 @@
           "description": "조직도 기준 부서/팀 코드 CRUD",
           "phase": 1,
           "priority": "high",
-          "status": "in_progress",
+          "status": "done",
           "depends_on": [
             "F1-03"
           ]
@@ -288,7 +288,7 @@
           "description": "부서·팀·사업명·목표·사업비·기간·위치·내용·추진현황·향후계획·문제점·기대효과·참고자료",
           "phase": 3,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F2-01",
             "F2-04"
@@ -300,7 +300,7 @@
           "description": "국/도/군/기타 분리 입력, 단위(천원)",
           "phase": 3,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F2-04"
           ]
@@ -311,7 +311,7 @@
           "description": "회차별 데이터 버전 저장",
           "phase": 3,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F5-01"
           ]
@@ -322,7 +322,7 @@
           "description": "직전 회차 향후계획 vs 다음 회차 추진현황 나란히 비교",
           "phase": 3,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F5-03"
           ]
@@ -333,7 +333,7 @@
           "description": "누가/언제/무엇을 변경했는지 이력 관리",
           "phase": 3,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F5-03"
           ]
@@ -344,7 +344,7 @@
           "description": "중간관리자/관리자 검토·승인 처리",
           "phase": 3,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F5-01"
           ]
@@ -355,7 +355,7 @@
           "description": "마감 후 수정 잠금 처리",
           "phase": 3,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F5-03"
           ]
@@ -372,7 +372,7 @@
           "description": "서천군 모든 사업 입력, 주요업무와 유사 양식",
           "phase": 4,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F5-01"
           ]
@@ -383,7 +383,7 @@
           "description": "분기별 버전 저장, 향후계획 대비 진행 비교",
           "phase": 4,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F6-01"
           ]
@@ -394,7 +394,7 @@
           "description": "사업별 정책적 주요사업 플래그 지정",
           "phase": 4,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F6-01"
           ]
@@ -405,7 +405,7 @@
           "description": "부서별/읍면별/기간별(종료연도 기준) 분류·집계",
           "phase": 4,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F6-03",
             "F2-01"
@@ -423,7 +423,7 @@
           "description": "계층 구조 등록, 담당 부서·팀 지정",
           "phase": 5,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F2-07"
           ]
@@ -434,7 +434,7 @@
           "description": "정상추진/일부추진/지연/완료/실천계획 변경, 이행률(%)",
           "phase": 5,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F7-01"
           ]
@@ -445,7 +445,7 @@
           "description": "점검 시점별 이행현황·증빙 정리",
           "phase": 5,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F7-02"
           ]
@@ -456,7 +456,7 @@
           "description": "평가 자료·변경 사유 이력 관리",
           "phase": 5,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F7-02"
           ]
@@ -467,7 +467,7 @@
           "description": "공약 단위사업과 보고 사업 데이터 연결",
           "phase": 5,
           "priority": "low",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F7-01",
             "F6-01"
@@ -485,7 +485,7 @@
           "description": "신청→선정/미선정→교부→집행 단계 추적",
           "phase": 5,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F2-04"
           ]
@@ -496,7 +496,7 @@
           "description": "신청액·선정액·매칭비율 입력",
           "phase": 5,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F8-01"
           ]
@@ -507,7 +507,7 @@
           "description": "부서별/분야별 비교",
           "phase": 5,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F8-01"
           ]
@@ -529,7 +529,7 @@
           "description": "투자심사 대상 표시, 심사 단계/결과 기록, 중기재정계획 연결",
           "phase": 5,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F8-01"
           ]
@@ -546,7 +546,7 @@
           "description": "기금 투자계획 사업 목록, 연차 투자액",
           "phase": 5,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F2-04"
           ]
@@ -557,7 +557,7 @@
           "description": "투자계획 대비 집행률, 인구유입 효과지표 관리",
           "phase": 5,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F9-01"
           ]
@@ -568,7 +568,7 @@
           "description": "기금 사업 읍면별 분포 집계",
           "phase": 5,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F9-01",
             "F2-01"
@@ -586,7 +586,7 @@
           "description": "사업/시책별 목표치·실적치·달성률 관리",
           "phase": 5,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F3-01"
           ]
@@ -597,7 +597,7 @@
           "description": "연차별 달성률 추이, 우수사례 정리",
           "phase": 5,
           "priority": "low",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F10-01"
           ]
@@ -625,7 +625,7 @@
           "description": "모든 사업에 국/도/군/기타 사업비 입력",
           "phase": 5,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F2-04"
           ]
@@ -647,7 +647,7 @@
           "description": "예산 대비 집행 입력 및 집계",
           "phase": 5,
           "priority": "low",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F11-01"
           ]
@@ -664,7 +664,7 @@
           "description": "보고회(2·7·11월), 순기표(1·4·7·10월), 공모 마감, 공약 점검",
           "phase": 6,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F1-03"
           ]
@@ -675,7 +675,7 @@
           "description": "입력 마감 임박 알림(시스템/메일 등)",
           "phase": 6,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F12-01"
           ]
@@ -686,7 +686,7 @@
           "description": "서무 제출 현황 대시보드 위젯",
           "phase": 6,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F5-01",
             "F6-01"
@@ -704,7 +704,7 @@
           "description": "보고회·순기표·공약 이행 보고서 한글 양식 출력",
           "phase": 6,
           "priority": "high",
-          "status": "todo",
+          "status": "hold",
           "depends_on": [
             "F5-01",
             "F6-01"
@@ -716,7 +716,7 @@
           "description": "필터 조건별 리스트 엑셀 다운로드",
           "phase": 6,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F5-01",
             "F6-01"
@@ -728,7 +728,7 @@
           "description": "발표자료·보고서 PDF 생성",
           "phase": 6,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F13-01"
           ]
@@ -745,7 +745,7 @@
           "description": "위치도·현장사진 등 업로드, 형식·용량 정책",
           "phase": 3,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F1-03"
           ]
@@ -756,7 +756,7 @@
           "description": "썸네일/미리보기 표시",
           "phase": 3,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F14-01"
           ]
@@ -767,7 +767,7 @@
           "description": "정책/주요업무/순기표/공약/공모 항목에 첨부 연결",
           "phase": 3,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F14-01"
           ]
@@ -784,7 +784,7 @@
           "description": "유형·읍면·재원별 사업비 합계·비중",
           "phase": 6,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F11-01",
             "F6-04"
@@ -796,7 +796,7 @@
           "description": "부서별 사업 수, 종료연도별 분포(주요사업 기준)",
           "phase": 6,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F6-04"
           ]
@@ -807,7 +807,7 @@
           "description": "공약 이행률, 국도비 확보액·선정률, 지방소멸기금 집행 현황",
           "phase": 6,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F7-02",
             "F8-03",
@@ -820,7 +820,7 @@
           "description": "추진현황 분포, 보고회·순기표 제출 현황",
           "phase": 6,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F12-03"
           ]
@@ -831,7 +831,7 @@
           "description": "기간/부서/읍면/유형/분야/재원/상태 필터",
           "phase": 6,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F15-01"
           ]
@@ -842,7 +842,7 @@
           "description": "읍면 단위 지도 기반 시각화",
           "phase": 6,
           "priority": "low",
-          "status": "todo",
+          "status": "hold",
           "depends_on": [
             "F15-01"
           ]
@@ -859,7 +859,7 @@
           "description": "주요 데이터 생성·수정·삭제 로그",
           "phase": 0,
           "priority": "high",
-          "status": "in_progress",
+          "status": "done",
           "depends_on": [
             "F1-03"
           ]
@@ -870,7 +870,7 @@
           "description": "권한·부서 범위 기반 접근통제 적용",
           "phase": 0,
           "priority": "high",
-          "status": "in_progress",
+          "status": "done",
           "depends_on": [
             "F1-03"
           ]
@@ -892,7 +892,7 @@
           "description": "DB·파일 백업 및 복구 절차 수립",
           "phase": 0,
           "priority": "high",
-          "status": "todo",
+          "status": "hold",
           "depends_on": []
         },
         {
@@ -936,7 +936,7 @@
           "description": "사내 서버/컨테이너 배포 구성",
           "phase": 0,
           "priority": "medium",
-          "status": "todo",
+          "status": "hold",
           "depends_on": [
             "F17-01"
           ]
@@ -959,7 +959,7 @@
           "description": "서무/일반/관리자 사용 가이드 작성",
           "phase": 6,
           "priority": "low",
-          "status": "todo",
+          "status": "hold",
           "depends_on": []
         }
       ]

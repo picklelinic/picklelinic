@@ -11,6 +11,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DeleteTaskButton } from "./delete-button";
+import { Attachments } from "@/components/attachments";
+import { PrintButton } from "@/components/print-button";
 
 export const dynamic = "force-dynamic";
 
@@ -77,10 +79,11 @@ export default async function MajorTaskDetail({
     <div className="max-w-5xl">
       <div className="mb-4 flex items-start justify-between gap-4">
         <PageHeader title={task.t.name} description={`${task.dept ?? ""} ${task.team ?? ""}`.trim()} />
-        <div className="flex shrink-0 gap-2">
+        <div className="no-print flex shrink-0 gap-2">
           <Button asChild variant="outline" size="sm">
             <Link href="/major-tasks">목록</Link>
           </Button>
+          <PrintButton />
           <Button asChild size="sm">
             <Link href={`/major-tasks/${taskId}/report`}>+ 회차 보고 추가</Link>
           </Button>
@@ -148,6 +151,10 @@ export default async function MajorTaskDetail({
           <Field label="참고자료" value={current.refs} wide />
         </CardContent>
       </Card>
+
+      <div className="mt-3">
+        <Attachments entity="major_task" entityId={taskId} canEdit={canEdit} />
+      </div>
     </div>
   );
 }

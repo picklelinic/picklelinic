@@ -478,6 +478,24 @@ export const schedules = pgTable(
   (t) => [index("schedules_due_idx").on(t.dueDate)],
 );
 
+/* ================= 첨부파일 (이미지/문서) — F14 ================= */
+export const attachments = pgTable(
+  "attachments",
+  {
+    id: serial("id").primaryKey(),
+    entity: varchar("entity", { length: 50 }).notNull(), // policy / major_task / cycle_item ...
+    entityId: integer("entity_id").notNull(),
+    filename: varchar("filename", { length: 255 }).notNull(),
+    storedName: varchar("stored_name", { length: 255 }).notNull(),
+    mimeType: varchar("mime_type", { length: 100 }).notNull(),
+    sizeBytes: integer("size_bytes").notNull(),
+    caption: varchar("caption", { length: 200 }),
+    uploadedBy: integer("uploaded_by").references(() => users.id, { onDelete: "set null" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("attachments_entity_idx").on(t.entity, t.entityId)],
+);
+
 /* ---------------- Inferred types ---------------- */
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
@@ -504,3 +522,4 @@ export type Grant = typeof grants.$inferSelect;
 export type GrantStage = (typeof grantStageEnum.enumValues)[number];
 export type Kpi = typeof kpis.$inferSelect;
 export type Schedule = typeof schedules.$inferSelect;
+export type Attachment = typeof attachments.$inferSelect;
