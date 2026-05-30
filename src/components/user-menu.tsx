@@ -1,7 +1,6 @@
 import { signOut } from "@/auth";
 import { Button } from "@/components/ui/button";
-import { ROLE_LABELS } from "@/lib/rbac";
-import type { UserRole } from "@/db/schema";
+import { ROLE_LABELS, type UserRole } from "@/lib/rbac";
 
 export function UserMenu({ name, role }: { name: string; role: UserRole }) {
   return (

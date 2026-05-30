@@ -1,4 +1,4 @@
-import type { UserRole } from "@/db/schema";
+import type { UserRole } from "@/lib/rbac";
 
 export type NavItem = {
   label: string;

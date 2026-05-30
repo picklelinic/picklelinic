@@ -30,6 +30,17 @@ export const codeCategoryEnum = pgEnum("code_category", [
   "policy_goal", // 군정 목표/시책 체계
 ]);
 
+// 정책 상태: 구상(검토 전) / 시행(현재 시행 중)
+export const policyStatusEnum = pgEnum("policy_status", ["draft", "active"]);
+
+// 사업제안 검토 상태
+export const ideaStatusEnum = pgEnum("idea_status", [
+  "proposed", // 제안됨
+  "reviewing", // 검토중
+  "adopted", // 채택
+  "rejected", // 반려
+]);
+
 /* ---------------- 조직: 부서 / 팀 ---------------- */
 export const departments = pgTable(
   "departments",
@@ -145,6 +156,120 @@ export const auditLogs = pgTable(
   ],
 );
 
+/* ---------------- 정책 아카이브 (Phase 2) ---------------- */
+export const policies = pgTable(
+  "policies",
+  {
+    id: serial("id").primaryKey(),
+    title: varchar("title", { length: 200 }).notNull(),
+    status: policyStatusEnum("status").notNull().default("draft"), // 구상/시행
+    summary: text("summary"), // 한 줄 요약
+    content: text("content"), // 상세 내용
+    // 분류 (공통코드 codes 참조)
+    fieldId: integer("field_id").references(() => codes.id, { onDelete: "set null" }),
+    projectTypeId: integer("project_type_id").references(() => codes.id, {
+      onDelete: "set null",
+    }),
+    // 담당 조직 / 지역
+    departmentId: integer("department_id").references(() => departments.id, {
+      onDelete: "set null",
+    }),
+    teamId: integer("team_id").references(() => teams.id, { onDelete: "set null" }),
+    townId: integer("town_id").references(() => towns.id, { onDelete: "set null" }),
+    // 사업비(천원), 기간
+    budgetThousand: integer("budget_thousand"),
+    startDate: varchar("start_date", { length: 10 }), // YYYY-MM-DD
+    endDate: varchar("end_date", { length: 10 }),
+    // 작성자
+    authorId: integer("author_id").references(() => users.id, { onDelete: "set null" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index("policies_status_idx").on(t.status),
+    index("policies_field_idx").on(t.fieldId),
+    index("policies_dept_idx").on(t.departmentId),
+    index("policies_town_idx").on(t.townId),
+    index("policies_created_idx").on(t.createdAt),
+  ],
+);
+
+// 정책 상태 변경 이력 (구상→시행 전환 등)
+export const policyHistory = pgTable(
+  "policy_history",
+  {
+    id: serial("id").primaryKey(),
+    policyId: integer("policy_id")
+      .notNull()
+      .references(() => policies.id, { onDelete: "cascade" }),
+    fromStatus: policyStatusEnum("from_status"),
+    toStatus: policyStatusEnum("to_status").notNull(),
+    note: text("note"),
+    changedBy: integer("changed_by").references(() => users.id, { onDelete: "set null" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("policy_history_policy_idx").on(t.policyId)],
+);
+
+// 정책별 의견(댓글)
+export const policyComments = pgTable(
+  "policy_comments",
+  {
+    id: serial("id").primaryKey(),
+    policyId: integer("policy_id")
+      .notNull()
+      .references(() => policies.id, { onDelete: "cascade" }),
+    authorId: integer("author_id").references(() => users.id, { onDelete: "set null" }),
+    body: text("body").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("policy_comments_policy_idx").on(t.policyId)],
+);
+
+/* ---------------- 의견 / 사업제안 (Phase 2) ---------------- */
+// 분야별 사업 제안 게시판
+export const ideas = pgTable(
+  "ideas",
+  {
+    id: serial("id").primaryKey(),
+    title: varchar("title", { length: 200 }).notNull(),
+    body: text("body").notNull(),
+    fieldId: integer("field_id").references(() => codes.id, { onDelete: "set null" }),
+    projectTypeId: integer("project_type_id").references(() => codes.id, {
+      onDelete: "set null",
+    }),
+    expectedEffect: text("expected_effect"), // 기대효과
+    status: ideaStatusEnum("status").notNull().default("proposed"),
+    authorId: integer("author_id").references(() => users.id, { onDelete: "set null" }),
+    voteCount: integer("vote_count").notNull().default(0), // 추천 수(denormalized)
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index("ideas_field_idx").on(t.fieldId),
+    index("ideas_status_idx").on(t.status),
+    index("ideas_votes_idx").on(t.voteCount),
+    index("ideas_created_idx").on(t.createdAt),
+  ],
+);
+
+// 사업제안 추천/공감 (사용자별 1회)
+export const ideaVotes = pgTable(
+  "idea_votes",
+  {
+    id: serial("id").primaryKey(),
+    ideaId: integer("idea_id")
+      .notNull()
+      .references(() => ideas.id, { onDelete: "cascade" }),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("idea_votes_uq").on(t.ideaId, t.userId)],
+);
+
 /* ---------------- Inferred types ---------------- */
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
@@ -154,3 +279,10 @@ export type Town = typeof towns.$inferSelect;
 export type Code = typeof codes.$inferSelect;
 export type UserRole = (typeof userRoleEnum.enumValues)[number];
 export type CodeCategory = (typeof codeCategoryEnum.enumValues)[number];
+export type Policy = typeof policies.$inferSelect;
+export type NewPolicy = typeof policies.$inferInsert;
+export type PolicyComment = typeof policyComments.$inferSelect;
+export type Idea = typeof ideas.$inferSelect;
+export type NewIdea = typeof ideas.$inferInsert;
+export type PolicyStatus = (typeof policyStatusEnum.enumValues)[number];
+export type IdeaStatus = (typeof ideaStatusEnum.enumValues)[number];

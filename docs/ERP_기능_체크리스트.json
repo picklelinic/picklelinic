@@ -29,7 +29,7 @@
     },
     "summary": {
       "total_tasks": 75,
-      "done": 5,
+      "done": 13,
       "in_progress": 10
     }
   },
@@ -186,7 +186,7 @@
           "description": "시행정책/구상정책 상태 구분, 기본 항목 입력",
           "phase": 2,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F2-02",
             "F2-03"
@@ -198,7 +198,7 @@
           "description": "유형/분야/부서/읍면 분류값 연결",
           "phase": 2,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F3-01"
           ]
@@ -209,7 +209,7 @@
           "description": "시행/구상별 유형·분야·부서·읍면·기간 필터, 키워드 검색, 목록/카드 보기",
           "phase": 2,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F3-02"
           ]
@@ -220,7 +220,7 @@
           "description": "상태 전환 처리 및 변경 이력 기록, 공약/공모 연결",
           "phase": 2,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F3-01"
           ]
@@ -237,7 +237,7 @@
           "description": "정책 상세에 자유 의견 등록/수정/삭제",
           "phase": 2,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F3-01"
           ]
@@ -248,7 +248,7 @@
           "description": "분야/유형 선택, 기대효과·근거 작성, 채택/검토 상태",
           "phase": 2,
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F2-02"
           ]
@@ -259,7 +259,7 @@
           "description": "의견·제안 추천 수 집계 및 추천순 정렬",
           "phase": 2,
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F4-01",
             "F4-02"
@@ -271,7 +271,7 @@
           "description": "최신/추천순, 분야별 그룹 보기",
           "phase": 2,
           "priority": "low",
-          "status": "todo",
+          "status": "done",
           "depends_on": [
             "F4-02"
           ]

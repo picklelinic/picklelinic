@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV } from "@/lib/nav";
-import { hasRole } from "@/lib/rbac";
-import type { UserRole } from "@/db/schema";
+import { hasRole, type UserRole } from "@/lib/rbac";
 import { cn } from "@/lib/utils";
 
 export function AppSidebar({ role }: { role: UserRole }) {
