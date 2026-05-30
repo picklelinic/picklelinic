@@ -270,6 +270,214 @@ export const ideaVotes = pgTable(
   (t) => [uniqueIndex("idea_votes_uq").on(t.ideaId, t.userId)],
 );
 
+/* ================= Phase 3: 주요업무 보고회 (연 3회 2·7·11월) ================= */
+// 사업 마스터 — 회차를 거쳐 지속되는 사업 단위
+export const majorTasks = pgTable(
+  "major_tasks",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 200 }).notNull(), // 사업명
+    departmentId: integer("department_id").references(() => departments.id, {
+      onDelete: "set null",
+    }),
+    teamId: integer("team_id").references(() => teams.id, { onDelete: "set null" }),
+    townId: integer("town_id").references(() => towns.id, { onDelete: "set null" }),
+    isActive: boolean("is_active").notNull().default(true),
+    createdBy: integer("created_by").references(() => users.id, { onDelete: "set null" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index("major_tasks_dept_idx").on(t.departmentId),
+    index("major_tasks_town_idx").on(t.townId),
+  ],
+);
+
+// 회차별 스냅샷 — 13개 입력항목 중 가변 항목 보존 + 변경 추적
+export const majorTaskReports = pgTable(
+  "major_task_reports",
+  {
+    id: serial("id").primaryKey(),
+    taskId: integer("task_id")
+      .notNull()
+      .references(() => majorTasks.id, { onDelete: "cascade" }),
+    year: integer("year").notNull(),
+    round: integer("round").notNull(), // 보고 월: 2 / 7 / 11
+    goal: text("goal"), // 목표 및 방향성
+    budgetThousand: integer("budget_thousand"), // 사업비(천원)
+    periodText: varchar("period_text", { length: 100 }), // 사업기간
+    locationText: varchar("location_text", { length: 200 }), // 사업위치
+    content: text("content"), // 사업내용
+    progress: text("progress"), // 추진현황
+    futurePlan: text("future_plan"), // 향후계획
+    problem: text("problem"), // 문제점 및 해결방안
+    effect: text("effect"), // 기대효과
+    refs: text("refs"), // 참고자료(위치도·현장사진 설명/링크)
+    createdBy: integer("created_by").references(() => users.id, { onDelete: "set null" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("major_task_reports_uq").on(t.taskId, t.year, t.round),
+    index("major_task_reports_period_idx").on(t.year, t.round),
+  ],
+);
+
+/* ================= Phase 4: 순기표 (분기 1·4·7·10월) ================= */
+// 순기표 사업 마스터 — 서천군 모든 사업
+export const cycleItems = pgTable(
+  "cycle_items",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 200 }).notNull(), // 사업명
+    departmentId: integer("department_id").references(() => departments.id, {
+      onDelete: "set null",
+    }),
+    teamId: integer("team_id").references(() => teams.id, { onDelete: "set null" }),
+    townId: integer("town_id").references(() => towns.id, { onDelete: "set null" }),
+    fieldId: integer("field_id").references(() => codes.id, { onDelete: "set null" }),
+    fundSourceId: integer("fund_source_id").references(() => codes.id, { onDelete: "set null" }),
+    budgetThousand: integer("budget_thousand"),
+    startYear: integer("start_year"),
+    endYear: integer("end_year"), // 종료연도 — 별도 관리 기준
+    isKeyPolicy: boolean("is_key_policy").notNull().default(false), // 정책적 주요사업 체크
+    isActive: boolean("is_active").notNull().default(true),
+    createdBy: integer("created_by").references(() => users.id, { onDelete: "set null" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index("cycle_items_dept_idx").on(t.departmentId),
+    index("cycle_items_town_idx").on(t.townId),
+    index("cycle_items_keypolicy_idx").on(t.isKeyPolicy),
+    index("cycle_items_endyear_idx").on(t.endYear),
+  ],
+);
+
+// 분기별 스냅샷
+export const cycleReports = pgTable(
+  "cycle_reports",
+  {
+    id: serial("id").primaryKey(),
+    itemId: integer("item_id")
+      .notNull()
+      .references(() => cycleItems.id, { onDelete: "cascade" }),
+    year: integer("year").notNull(),
+    quarter: integer("quarter").notNull(), // 작성 월: 1 / 4 / 7 / 10
+    content: text("content"), // 사업내용
+    progress: text("progress"), // 추진현황
+    futurePlan: text("future_plan"), // 향후계획
+    budgetThousand: integer("budget_thousand"),
+    executedThousand: integer("executed_thousand"), // 집행액(천원)
+    note: text("note"),
+    createdBy: integer("created_by").references(() => users.id, { onDelete: "set null" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("cycle_reports_uq").on(t.itemId, t.year, t.quarter),
+    index("cycle_reports_period_idx").on(t.year, t.quarter),
+  ],
+);
+
+/* ================= Phase 5: 기획실 연계 ================= */
+// 공약사업 (대과제 → 세부과제 → 단위사업; level 1/2/3, parentId 계층)
+export const pledgeStatusEnum = pgEnum("pledge_status", [
+  "normal", // 정상추진
+  "partial", // 일부추진
+  "delayed", // 지연
+  "completed", // 완료
+  "changed", // 실천계획 변경
+]);
+
+export const pledges = pgTable(
+  "pledges",
+  {
+    id: serial("id").primaryKey(),
+    title: varchar("title", { length: 300 }).notNull(),
+    level: integer("level").notNull().default(1), // 1=대과제 2=세부과제 3=단위사업
+    parentId: integer("parent_id"),
+    departmentId: integer("department_id").references(() => departments.id, {
+      onDelete: "set null",
+    }),
+    status: pledgeStatusEnum("status").notNull().default("normal"),
+    progressPct: integer("progress_pct").notNull().default(0), // 이행률 %
+    note: text("note"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("pledges_parent_idx").on(t.parentId), index("pledges_level_idx").on(t.level)],
+);
+
+// 국도비 보조사업 / 공모사업
+export const grantStageEnum = pgEnum("grant_stage", [
+  "applied", // 신청
+  "selected", // 선정
+  "rejected", // 미선정
+  "granted", // 교부
+  "executing", // 집행
+]);
+
+export const grants = pgTable(
+  "grants",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 300 }).notNull(),
+    agency: varchar("agency", { length: 200 }), // 공모기관(부처/도)
+    departmentId: integer("department_id").references(() => departments.id, {
+      onDelete: "set null",
+    }),
+    fieldId: integer("field_id").references(() => codes.id, { onDelete: "set null" }),
+    stage: grantStageEnum("stage").notNull().default("applied"),
+    requestedThousand: integer("requested_thousand"), // 신청액
+    selectedThousand: integer("selected_thousand"), // 선정액
+    nationalThousand: integer("national_thousand"), // 국비
+    provincialThousand: integer("provincial_thousand"), // 도비
+    countyThousand: integer("county_thousand"), // 군비
+    investmentReview: varchar("investment_review", { length: 50 }), // 투자심사 단계/결과
+    periodText: varchar("period_text", { length: 100 }),
+    note: text("note"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("grants_stage_idx").on(t.stage), index("grants_dept_idx").on(t.departmentId)],
+);
+
+// 성과지표
+export const kpis = pgTable(
+  "kpis",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 300 }).notNull(),
+    departmentId: integer("department_id").references(() => departments.id, {
+      onDelete: "set null",
+    }),
+    fieldId: integer("field_id").references(() => codes.id, { onDelete: "set null" }),
+    year: integer("year").notNull(),
+    unit: varchar("unit", { length: 30 }), // 단위
+    targetValue: integer("target_value"), // 목표치
+    actualValue: integer("actual_value"), // 실적치
+    note: text("note"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("kpis_year_idx").on(t.year), index("kpis_dept_idx").on(t.departmentId)],
+);
+
+/* ================= Phase 6: 업무 일정 / 알림 ================= */
+export const schedules = pgTable(
+  "schedules",
+  {
+    id: serial("id").primaryKey(),
+    title: varchar("title", { length: 200 }).notNull(),
+    category: varchar("category", { length: 30 }).notNull(), // 보고회/순기표/공모/공약 등
+    dueDate: varchar("due_date", { length: 10 }).notNull(), // YYYY-MM-DD
+    note: text("note"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("schedules_due_idx").on(t.dueDate)],
+);
+
 /* ---------------- Inferred types ---------------- */
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
@@ -286,3 +494,13 @@ export type Idea = typeof ideas.$inferSelect;
 export type NewIdea = typeof ideas.$inferInsert;
 export type PolicyStatus = (typeof policyStatusEnum.enumValues)[number];
 export type IdeaStatus = (typeof ideaStatusEnum.enumValues)[number];
+export type MajorTask = typeof majorTasks.$inferSelect;
+export type MajorTaskReport = typeof majorTaskReports.$inferSelect;
+export type CycleItem = typeof cycleItems.$inferSelect;
+export type CycleReport = typeof cycleReports.$inferSelect;
+export type Pledge = typeof pledges.$inferSelect;
+export type PledgeStatus = (typeof pledgeStatusEnum.enumValues)[number];
+export type Grant = typeof grants.$inferSelect;
+export type GrantStage = (typeof grantStageEnum.enumValues)[number];
+export type Kpi = typeof kpis.$inferSelect;
+export type Schedule = typeof schedules.$inferSelect;

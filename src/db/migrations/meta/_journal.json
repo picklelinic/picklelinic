@@ -15,6 +15,13 @@
       "when": 1780104868073,
       "tag": "0001_damp_hex",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1780106860031,
+      "tag": "0002_workable_mac_gargan",
+      "breakpoints": true
     }
   ]
 }
